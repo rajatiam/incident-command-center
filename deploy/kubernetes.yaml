@@ -1,0 +1,74 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: 13-incident-response-data
+spec:
+  accessModes: [ReadWriteOnce]
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: 13-incident-response
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: 13-incident-response
+  template:
+    metadata:
+      labels:
+        app: 13-incident-response
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        fsGroup: 10001
+      containers:
+        - name: app
+          image: 13-incident-response:local
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8113
+          resources:
+            requests:
+              cpu: 100m
+              memory: 64Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8113
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8113
+            initialDelaySeconds: 5
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ALL]
+          volumeMounts:
+            - name: data
+              mountPath: /app/data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: 13-incident-response-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: 13-incident-response
+spec:
+  selector:
+    app: 13-incident-response
+  ports:
+    - port: 80
+      targetPort: 8113

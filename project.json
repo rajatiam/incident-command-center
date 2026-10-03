@@ -1,0 +1,33 @@
+{
+  "name": "Incident Response",
+  "kind": "incidents",
+  "entity": "incident",
+  "accent": "#dc2626",
+  "skills": "Incident lifecycle, UTC timestamps, resolution duration, SRE reporting",
+  "description": "Acknowledge incidents, record recovery, and measure resolution time.",
+  "example": {
+    "title": "Elevated API latency",
+    "service": "checkout",
+    "severity": "high"
+  },
+  "port": 8113,
+  "fields": [
+    "title",
+    "service",
+    "severity"
+  ],
+  "stack": [
+    "Python",
+    "FastAPI",
+    "Angular",
+    "TypeScript",
+    "SQLite",
+    "Docker",
+    "Kubernetes",
+    "GitHub Actions"
+  ],
+  "demo_action": "acknowledge",
+  "demo_expected": {
+    "status": "acknowledged"
+  }
+}
