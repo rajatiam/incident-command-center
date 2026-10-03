@@ -1,5 +1,5 @@
 {
-  "name": "Incident Response",
+  "name": "Incident Command Center",
   "kind": "incidents",
   "entity": "incident",
   "accent": "#dc2626",
@@ -29,5 +29,7 @@
   "demo_action": "acknowledge",
   "demo_expected": {
     "status": "acknowledged"
-  }
+  },
+  "slug": "incident-command-center",
+  "engineering_version": "3.0.0"
 }

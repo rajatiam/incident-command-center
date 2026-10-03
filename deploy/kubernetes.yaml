@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: 13-incident-response-data
+  name: incident-command-center-data
 spec:
   accessModes: [ReadWriteOnce]
   resources:
@@ -11,18 +11,18 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: 13-incident-response
+  name: incident-command-center
 spec:
   replicas: 1
   strategy:
     type: Recreate
   selector:
     matchLabels:
-      app: 13-incident-response
+      app: incident-command-center
   template:
     metadata:
       labels:
-        app: 13-incident-response
+        app: incident-command-center
     spec:
       securityContext:
         runAsNonRoot: true
@@ -30,7 +30,7 @@ spec:
         fsGroup: 10001
       containers:
         - name: app
-          image: 13-incident-response:local
+          image: incident-command-center:local
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8113
@@ -60,15 +60,15 @@ spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: 13-incident-response-data
+            claimName: incident-command-center-data
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: 13-incident-response
+  name: incident-command-center
 spec:
   selector:
-    app: 13-incident-response
+    app: incident-command-center
   ports:
     - port: 80
       targetPort: 8113
